@@ -99,6 +99,11 @@ func NewWinDivertHandleWithFlags(filter string, flags uint8) (*WinDivertHandle, 
 	return winDivertHandle, nil
 }
 
+// Check if the handle is open
+func (wd *WinDivertHandle) IsOpen() bool {
+	return wd.open
+}
+
 // Close the Handle
 // See https://reqrypt.org/windivert-doc.html#divert_close
 func (wd *WinDivertHandle) Close() error {
@@ -139,19 +144,34 @@ func (wd *WinDivertHandle) Recv() (*Packet, error) {
 
 // Divert a packet from the Network Stack
 // https://reqrypt.org/windivert-doc.html#divert_recv_ex
+// Allocates the buffer, but does not handle its lifecycle
 func (wd *WinDivertHandle) RecvEx() ([]byte, []Address, uint, error) {
 	if !wd.open {
 		return nil, nil, 0, errors.New("can't receiveEx, the handle isn't open")
 	}
-	quantity := uint(MaxPacketBufferSize / PacketBufferSize)
 	packetBuffer := make([]byte, MaxPacketBufferSize)
+	packets, addr, len, err := wd.RecvExInto(packetBuffer, 0)
+	return packets, addr, len, err
+}
+
+func (wd *WinDivertHandle) RecvExInto(packetBuffer []byte, quantity uint) ([]byte, []Address, uint, error) {
+	if !wd.open {
+		return nil, nil, 0, errors.New("can't receiveEx, the handle isn't open")
+	}
+	if packetBuffer == nil {
+		return nil, nil, 0, errors.New("buffer can't be nil")
+	}
+	totalPacketBufferSize := cap(packetBuffer)
+	if quantity == 0 {
+		quantity = uint(totalPacketBufferSize / PacketBufferSize)
+	}
 	var packetLen uint
 	addr := make([]Address, quantity)
 	size := uint(unsafe.Sizeof(Address{}))
 	addrlen := size * quantity
 	success, _, err := winDivertRecvEx.Call(wd.handle,
 		uintptr(unsafe.Pointer(&packetBuffer[0])),
-		uintptr(MaxPacketBufferSize),
+		uintptr(totalPacketBufferSize),
 		uintptr(unsafe.Pointer(&packetLen)),
 		uintptr(0),
 		uintptr(unsafe.Pointer(&addr[0])),
