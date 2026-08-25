@@ -4,7 +4,7 @@ import (
 	"fmt"
 	"net"
 
-	"github.com/yanlinLiu0424/godivert/header"
+	"github.com/4310V343k/godivert/header"
 )
 
 // Represents a packet

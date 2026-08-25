@@ -3,7 +3,7 @@ package main
 import (
 	"fmt"
 
-	"github.com/yanlinLiu0424/godivert/windivert"
+	"github.com/4310V343k/godivert/windivert"
 )
 
 func main() {

@@ -7,7 +7,7 @@ WinDivert is a user-mode packet capture-and-divert package for Windows.
 ## Installation
 
 ```bash
-go get github.com/yanlinLiu0424/godivert
+go get github.com/4310V343k/godivert
 ```
 
 ## Introduction
@@ -75,7 +75,7 @@ package main
 import (
 	"fmt"
 
-	"github.com/yanlinLiu0424/go-divert/windivert"
+	"github.com/4310V343k/go-divert/windivert"
 )
 
 func main() {
@@ -109,7 +109,7 @@ import (
 	"net"
 	"time"
 
-	"github.com/yanlinLiu0424/go-divert/windivert"
+	"github.com/4310V343k/go-divert/windivert"
 )
 
 var cloudflareDNS = net.ParseIP("8.8.4.4")
@@ -159,8 +159,8 @@ import (
 	"fmt"
 	"time"
 
-	"github.com/yanlinLiu0424/go-divert/header"
-	"github.com/yanlinLiu0424/go-divert/windivert"
+	"github.com/4310V343k/go-divert/header"
+	"github.com/4310V343k/go-divert/windivert"
 )
 
 var icmpv4, icmpv6, udp, tcp, unknown, served uint

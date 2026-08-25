@@ -5,7 +5,7 @@ import (
 	"net"
 	"time"
 
-	"github.com/yanlinLiu0424/godivert/windivert"
+	"github.com/4310V343k/godivert/windivert"
 )
 
 var cloudflareDNS = net.ParseIP("8.8.4.4")

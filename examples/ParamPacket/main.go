@@ -6,7 +6,7 @@ import (
 	"os/signal"
 	"testing"
 
-	"github.com/yanlinLiu0424/godivert/windivert"
+	"github.com/4310V343k/godivert/windivert"
 )
 
 func checkPacketEx(wd *windivert.WinDivertHandle, packetChan <-chan *windivert.Packet) {
