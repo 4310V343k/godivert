@@ -1,7 +1,6 @@
 package windivert
 
 import (
-	"log"
 	"unsafe"
 )
 
@@ -99,7 +98,6 @@ func (a *Address) UnsetOutbound() {
 }
 
 func (a *Address) Loopback() bool {
-	log.Printf("flag:%X", a.Flags)
 	return (a.Flags & uint8(0x01<<2)) == uint8(0x01<<2)
 }
 
