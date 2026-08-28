@@ -12,6 +12,7 @@ var (
 	winDivertDLL *syscall.LazyDLL
 
 	winDivertOpen                *syscall.LazyProc
+	winDivertShutdown            *syscall.LazyProc
 	winDivertClose               *syscall.LazyProc
 	winDivertRecv                *syscall.LazyProc
 	winDivertRecvEx              *syscall.LazyProc
@@ -49,6 +50,7 @@ func LoadDLL(path64, path32 string) {
 	winDivertDLL = syscall.NewLazyDLL(dllPath)
 
 	winDivertOpen = winDivertDLL.NewProc("WinDivertOpen")
+	winDivertShutdown = winDivertDLL.NewProc("WinDivertShutdown")
 	winDivertClose = winDivertDLL.NewProc("WinDivertClose")
 	winDivertRecv = winDivertDLL.NewProc("WinDivertRecv")
 	winDivertRecvEx = winDivertDLL.NewProc("WinDivertRecvEx")
@@ -104,6 +106,13 @@ func (wd *WinDivertHandle) IsOpen() bool {
 	return wd.open
 }
 
+// Shutdown the Handle
+// See https://reqrypt.org/windivert-doc.html#divert_shutdown
+func (wd *WinDivertHandle) Shutdown(how Shutdown) error {
+	_, _, err := winDivertShutdown.Call(wd.handle, uintptr(how))
+	return err
+}
+
 // Close the Handle
 // See https://reqrypt.org/windivert-doc.html#divert_close
 func (wd *WinDivertHandle) Close() error {
@@ -144,7 +153,6 @@ func (wd *WinDivertHandle) Recv() (*Packet, error) {
 
 // Divert a packet from the Network Stack
 // https://reqrypt.org/windivert-doc.html#divert_recv_ex
-// Allocates the buffer, but does not handle its lifecycle
 func (wd *WinDivertHandle) RecvEx() ([]byte, []Address, uint, error) {
 	if !wd.open {
 		return nil, nil, 0, errors.New("can't receiveEx, the handle isn't open")
