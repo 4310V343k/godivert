@@ -128,9 +128,9 @@ func (e Event) String() string {
 type Shutdown int
 
 const (
-	ShutdownRecv Shutdown = 0
-	ShutdownSend Shutdown = 1
-	ShutdownBoth Shutdown = 2
+	ShutdownRecv Shutdown = 1
+	ShutdownSend Shutdown = 2
+	ShutdownBoth Shutdown = 3
 )
 
 func (h Shutdown) String() string {
