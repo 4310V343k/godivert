@@ -117,13 +117,13 @@ func (h *IPv4Header) Options() []byte {
 // Sets the source IP of the packet
 func (h *IPv4Header) SetSrcIP(ip net.IP) {
 	h.Modified = true
-	copy(h.Raw[12:16], ip[12:16])
+	copy(h.Raw[12:16], ip.To16()[12:16])
 }
 
 // Sets the destination IP of the packet
 func (h *IPv4Header) SetDstIP(ip net.IP) {
 	h.Modified = true
-	copy(h.Raw[16:20], ip[12:16])
+	copy(h.Raw[16:20], ip.To16()[12:16])
 }
 
 // Returns true if the header has been modified
